@@ -1,0 +1,12 @@
+
+{% extends 'weather/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h3>Register</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Register and Login</button>
+    </form>
+</div>
+{% endblock %}
