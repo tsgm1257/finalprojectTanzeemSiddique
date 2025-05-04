@@ -1,0 +1,34 @@
+{% extends 'weather/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h3>My Ratings</h3>
+    {% if ratings %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Temperature</th>
+                    <th>Condition</th>
+                    <th>Suggestion</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rating in ratings %}
+                    <tr>
+                        <td>{{ rating.preference.location }}</td>
+                        <td>{{ rating.preference.temperature }} °C</td>
+                        <td>{{ rating.preference.condition }}</td>
+                        <td>{{ rating.preference.recommendation }}</td>
+                        <td>{{ rating.rating }}</td>
+                        <td>{{ rating.feedback }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have not submitted any ratings yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

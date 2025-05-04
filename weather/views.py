@@ -5,6 +5,36 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from .forms import LocationForm, RatingForm
 from .models import WeatherPreference, ClothingRating
+from django.contrib.auth import logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+
+def login_register(request):
+    if request.method == 'POST':
+        if 'login' in request.POST:
+            login_form = AuthenticationForm(request, data=request.POST)
+            register_form = UserCreationForm()
+            if login_form.is_valid():
+                user = login_form.get_user()
+                login(request, user)
+                return redirect('home')
+        elif 'register' in request.POST:
+            register_form = UserCreationForm(request.POST)
+            login_form = AuthenticationForm()
+            if register_form.is_valid():
+                user = register_form.save()
+                login(request, user)
+                return redirect('home')
+    else:
+        login_form = AuthenticationForm()
+        register_form = UserCreationForm()
+
+    return render(request, 'weather/login_register.html', {
+        'login_form': login_form,
+        'register_form': register_form
+    })
+
 
 RAPIDAPI_KEY = '18bbf37254msh86222c1227b8dbfp1ebc20jsn2e17a62895fb'
 
@@ -102,3 +132,35 @@ def login_register(request):
     else:
         form = UserCreationForm()
     return render(request, 'weather/login_register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('home')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'weather/login.html', {'form': form})
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'weather/register.html', {'form': form})
+
+
+def logout_view(request):
+    auth_logout(request)
+    return redirect('home')
+
+@login_required
+def my_ratings(request):
+    ratings = ClothingRating.objects.filter(user=request.user).select_related('preference')
+    return render(request, 'weather/my_ratings.html', {'ratings': ratings})

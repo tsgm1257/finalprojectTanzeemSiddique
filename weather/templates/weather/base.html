@@ -12,8 +12,14 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto">
             <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'login_register' %}">Register/Login</a></li>
+            {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'my_ratings' %}">My Ratings</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login_register' %}">Register/Login</a></li>
+            {% endif %}
         </ul>
+
     </div>
 </nav>
 <div class="py-4">
