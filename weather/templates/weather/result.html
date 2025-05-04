@@ -10,32 +10,8 @@
         <p>Condition: {{ condition }}</p>
         <p><strong>Clothing Suggestion:</strong> {{ recommendation }}</p>
 
-        <!-- Modal Trigger Button -->
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#rateModal">
-            Rate This Suggestion
-        </button>
+        <a href="{% url 'rate' %}?pref_id={{ pref_id }}" class="btn btn-success">Rate This Suggestion</a>
 
-        <!-- Modal -->
-        <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <form method="post" action="{% url 'rate' %}">
-                {% csrf_token %}
-                <input type="hidden" name="pref_id" value="{{ pref_id }}">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="rateModalLabel">Rate the Suggestion</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  {{ form.as_p }}
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Submit Rating</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
     {% endif %}
 </div>
 {% endblock %}

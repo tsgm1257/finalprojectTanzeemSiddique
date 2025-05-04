@@ -30,7 +30,7 @@ def result(request):
             try:
                 # URL-encode the location to handle spaces and special characters
                 encoded_location = urllib.parse.quote(location)
-                url = "https://open-weather13.p.rapidapi.com/city/Dallas/EN"
+                url = f"https://open-weather13.p.rapidapi.com/city/{encoded_location}/EN"
                 headers = {
                     "X-RapidAPI-Key": RAPIDAPI_KEY,
                     "X-RapidAPI-Host": "open-weather13.p.rapidapi.com"
@@ -68,16 +68,26 @@ def result(request):
     return redirect('home')
 
 def rate(request):
+    pref_id = request.GET.get('pref_id') or request.POST.get('pref_id')
+
     if request.method == 'POST':
-        pref_id = request.POST.get('pref_id')
         form = RatingForm(request.POST)
         if form.is_valid():
             rating = form.save(commit=False)
             rating.user = request.user
             rating.preference_id = pref_id
             rating.save()
-            return redirect('home')
-    return render(request, 'weather/rate.html', {'form': RatingForm()})
+            return render(request, 'weather/rate.html', {
+                'form': RatingForm(),
+                'show_modal': True
+            })
+    else:
+        form = RatingForm()
+
+    return render(request, 'weather/rate.html', {
+        'form': form,
+        'pref_id': pref_id
+    })
 
 def about(request):
     return render(request, 'weather/about.html')
