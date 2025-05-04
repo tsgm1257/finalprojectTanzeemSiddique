@@ -11,29 +11,29 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 
 def login_register(request):
+    login_form = AuthenticationForm()
+    register_form = UserCreationForm()
+
     if request.method == 'POST':
-        if 'login' in request.POST:
+        action = request.POST.get('action')
+        if action == 'login':
             login_form = AuthenticationForm(request, data=request.POST)
-            register_form = UserCreationForm()
             if login_form.is_valid():
                 user = login_form.get_user()
                 login(request, user)
                 return redirect('home')
-        elif 'register' in request.POST:
+        elif action == 'register':
             register_form = UserCreationForm(request.POST)
-            login_form = AuthenticationForm()
             if register_form.is_valid():
                 user = register_form.save()
                 login(request, user)
                 return redirect('home')
-    else:
-        login_form = AuthenticationForm()
-        register_form = UserCreationForm()
 
     return render(request, 'weather/login_register.html', {
         'login_form': login_form,
         'register_form': register_form
     })
+
 
 
 RAPIDAPI_KEY = '18bbf37254msh86222c1227b8dbfp1ebc20jsn2e17a62895fb'
@@ -48,9 +48,14 @@ def recommend_clothing(temp, condition):
     else:
         return "Light clothing is fine for the weather."
 
+
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login_register')
+
     form = LocationForm()
     return render(request, 'weather/home.html', {'form': form})
+
 
 def result(request):
     if request.method == 'POST':
@@ -121,17 +126,6 @@ def rate(request):
 
 def about(request):
     return render(request, 'weather/about.html')
-
-def login_register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = UserCreationForm()
-    return render(request, 'weather/login_register.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
