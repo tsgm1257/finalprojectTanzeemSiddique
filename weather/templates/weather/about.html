@@ -1,8 +1,34 @@
-
 {% extends 'weather/base.html' %}
 {% block content %}
 <div class="container mt-5">
-    <h2>About This App</h2>
-    <p>This web app recommends clothing based on live weather data from your location using OpenWeatherMap API.</p>
+    <h2 class="mb-4">About This App</h2>
+
+    <p>
+        This web application was created as a final project for the course <strong>INF601 - Advanced Programming in Python</strong>
+        by <strong>Tanzeem Siddique</strong>. The goal of this project is to integrate real-world data using an API and generate useful
+        suggestions for end users using the Django web framework.
+    </p>
+
+    <p>
+        The app allows users to enter any city name and fetch real-time weather information using the <strong>OpenWeatherMap API</strong>
+        (accessed via <strong>RapidAPI</strong>). Based on the temperature and weather condition, it provides a personalized clothing recommendation.
+    </p>
+
+    <p>
+        Users can register or log in to save their searches and rate the clothing suggestions. A personal dashboard called <em>My Ratings</em>
+        is available where users can review all their previous ratings and feedback.
+    </p>
+
+    <p>
+        The application is built using <strong>Django</strong> and styled with <strong>Bootstrap</strong> for responsive and user-friendly design.
+        A Bootstrap modal is used to enhance interactivity when users rate their suggestions.
+    </p>
+
+    <p>
+        This project demonstrates the use of Django models, forms, views, templates, authentication, third-party APIs, and Bootstrap components
+        to create a full-stack, data-driven web application.
+    </p>
+
+    <p class="mt-4"><em>Thank you for using this app!</em></p>
 </div>
 {% endblock %}
